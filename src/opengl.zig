@@ -128,7 +128,7 @@ pub inline fn extensionSupported(extension: [:0]const u8) bool {
 /// Generic function pointer used for returning client API function pointers.
 ///
 /// see also: context_glext, glfwGetProcAddress
-pub const GLProc = *const fn () callconv(if (builtin.os.tag == .windows and builtin.cpu.arch == .x86) .Stdcall else .C) void;
+pub const GLProc = *const fn () callconv(.C) void;
 
 /// Returns the address of the specified function for the current context.
 ///
