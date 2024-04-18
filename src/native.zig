@@ -39,7 +39,7 @@ pub const BackendOptions = struct {
 /// will cause a link-time error.
 pub fn Native(comptime options: BackendOptions) type {
     const native = @cImport({
-        @cDefine("GLFW_INCLUDE_VULKAN", "1");
+        //@cDefine("GLFW_INCLUDE_VULKAN", "1");
         @cDefine("GLFW_INCLUDE_NONE", "1");
         if (options.win32) @cDefine("GLFW_EXPOSE_NATIVE_WIN32", "1");
         if (options.wgl) @cDefine("GLFW_EXPOSE_NATIVE_WGL", "1");
