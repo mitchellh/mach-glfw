@@ -13,7 +13,7 @@ pub fn build(b: *std.Build) !void {
     var module = b.addModule("mach-glfw", .{
         .target = target,
         .optimize = optimize,
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = b.path("src/main.zig"),
     });
     module.linkLibrary(glfw_dep.artifact("glfw"));
     @import("glfw").addPaths(module);
@@ -21,7 +21,7 @@ pub fn build(b: *std.Build) !void {
     const test_step = b.step("test", "Run library tests");
     const main_tests = b.addTest(.{
         .name = "glfw-tests",
-        .root_source_file = .{ .path = "src/main.zig" },
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });

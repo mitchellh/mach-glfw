@@ -12,8 +12,8 @@
     },
     .dependencies = .{
         .glfw = .{
-            .url = "https://github.com/mitchellh/glfw/archive/5474dadf3f832fffcd49dc73cd390507f364ccf4.tar.gz",
-            .hash = "12205978869b8c69d82875f5826bab1844b3e12d3c2d42f5e06ed92b5a36fba8f402",
+            .url = "https://github.com/mitchellh/glfw/archive/b552c6ec47326b94015feddb36058ea567b87159.tar.gz",
+            .hash = "1220736fa4ba211162c7a0e46cc8fe04d95921927688bff64ab5da7420d098a7272d",
         },
     },
 }
