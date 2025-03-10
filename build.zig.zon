@@ -1,6 +1,7 @@
 .{
-    .name = "mach-glfw",
+    .name = .mach_glfw,
     .version = "0.2.0",
+    .fingerprint = 0xa924846d9b909410,
     .paths = .{
         "src/",
         "build.zig",
@@ -12,8 +13,8 @@
     },
     .dependencies = .{
         .glfw = .{
-            .url = "https://pkg.machengine.org/glfw/ec656e10d3643a3a71149bb96ae6b0831b84b677.tar.gz",
-            .hash = "12207be469bad84baed2ede75cf89ede37e1ed5ee8be62a54d2b2112c5f56a44cc89",
+            .url = "git+https://github.com/der-teufel-programming/glfw.git#723f4dd6817ad2ffb97fb51dfd1f3549f81f0d97",
+            .hash = "glfw-0.0.0-bOgnnliqGQArzJGOJzzW-dL5H-sta3U6mauNbpTvaOAp",
         },
     },
 }
