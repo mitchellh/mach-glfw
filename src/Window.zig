@@ -282,7 +282,7 @@ pub const Hints = struct {
 /// hints using `glfw.Window.hint`.
 ///
 /// Successful creation does not change which context is current. Before you can use the newly
-/// created context, you need to make it current using `glfw.Window.makeContextCurrent`. For
+/// created context, you need to make it current using `glfw.makeContextCurrent`. For
 /// information about the `share` parameter, see context_sharing.
 ///
 /// The created window, framebuffer and context may differ from what you requested, as not all
@@ -305,7 +305,7 @@ pub const Hints = struct {
 /// glfw.Window.setMonitor. This will not affect its OpenGL or OpenGL ES context.
 ///
 /// By default, newly created windows use the placement recommended by the window system. To create
-/// the window at a specific position, make it initially invisible using the glfw.version window
+/// the window at a specific position, make it initially invisible using the `visible` window
 /// hint, set its position and then show it.
 ///
 /// As long as at least one full screen window is not iconified, the screensaver is prohibited from
@@ -624,8 +624,8 @@ pub inline fn setSize(self: Window, size: Size) void {
 /// A size with option width/height, used to represent e.g. constraints on a windows size while
 /// allowing specific axis to be unconstrained (null) if desired.
 pub const SizeOptional = struct {
-    width: ?u32,
-    height: ?u32,
+    width: ?u32 = null,
+    height: ?u32 = null,
 };
 
 /// Sets the size limits of the specified window's content area.
@@ -1561,12 +1561,7 @@ pub const InputModeCursor = enum(c_int) {
 
 /// Sets the input mode of the cursor, whether it should behave normally, be hidden, or grabbed.
 pub inline fn setInputModeCursor(self: Window, value: InputModeCursor) void {
-    if (value == .disabled) {
-        self.setInputMode(.cursor, value);
-        return self.setInputMode(.raw_mouse_motion, true);
-    }
-    self.setInputMode(.cursor, value);
-    return self.setInputMode(.raw_mouse_motion, false);
+    return self.setInputMode(InputMode.cursor, value);
 }
 
 /// Gets the current input mode of the cursor.
@@ -1677,9 +1672,9 @@ pub inline fn setInputMode(self: Window, mode: InputMode, value: anytype) void {
     internal_debug.assertInitialized();
     const T = @TypeOf(value);
     std.debug.assert(switch (mode) {
-        .cursor => switch (@typeInfo(T)) {
-            .Enum => T == InputModeCursor,
-            .EnumLiteral => @hasField(InputModeCursor, @tagName(value)),
+        .cursor => switch (@import("shims.zig").typeInfo(T)) {
+            .@"enum" => T == InputModeCursor,
+            .enum_literal => @hasField(InputModeCursor, @tagName(value)),
             else => false,
         },
         .sticky_keys => T == bool,
@@ -1687,9 +1682,9 @@ pub inline fn setInputMode(self: Window, mode: InputMode, value: anytype) void {
         .lock_key_mods => T == bool,
         .raw_mouse_motion => T == bool,
     });
-    const int_value: c_int = switch (@typeInfo(T)) {
-        .Enum,
-        .EnumLiteral,
+    const int_value: c_int = switch (@import("shims.zig").typeInfo(T)) {
+        .@"enum",
+        .enum_literal,
         => @intFromEnum(@as(InputModeCursor, value)),
         else => @intFromBool(value),
     };
@@ -2152,30 +2147,30 @@ pub inline fn setDropCallback(self: Window, comptime callback: ?fn (window: Wind
 inline fn hint(h: Hint, value: anytype) void {
     internal_debug.assertInitialized();
     const value_type = @TypeOf(value);
-    const value_type_info: std.builtin.Type = @typeInfo(value_type);
+    const value_type_info: @import("shims.zig").std.builtin.Type = @import("shims.zig").typeInfo(value_type);
 
     switch (value_type_info) {
-        .Int, .ComptimeInt => {
+        .int, .comptime_int => {
             c.glfwWindowHint(@intFromEnum(h), @as(c_int, @intCast(value)));
         },
-        .Bool => {
+        .bool => {
             const int_value = @intFromBool(value);
             c.glfwWindowHint(@intFromEnum(h), @as(c_int, @intCast(int_value)));
         },
-        .Enum => {
+        .@"enum" => {
             const int_value = @intFromEnum(value);
             c.glfwWindowHint(@intFromEnum(h), @as(c_int, @intCast(int_value)));
         },
-        .Array => |arr_type| {
+        .array => |arr_type| {
             if (arr_type.child != u8) {
                 @compileError("expected array of u8, got " ++ @typeName(arr_type));
             }
             c.glfwWindowHintString(@intFromEnum(h), &value[0]);
         },
-        .Pointer => |pointer_info| {
-            const pointed_type = @typeInfo(pointer_info.child);
+        .pointer => |pointer_info| {
+            const pointed_type = @import("shims.zig").typeInfo(pointer_info.child);
             switch (pointed_type) {
-                .Array => |arr_type| {
+                .array => |arr_type| {
                     if (arr_type.child != u8) {
                         @compileError("expected pointer to array of u8, got " ++ @typeName(arr_type));
                     }
