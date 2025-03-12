@@ -13,8 +13,8 @@
     },
     .dependencies = .{
         .glfw = .{
-            .url = "git+https://github.com/der-teufel-programming/glfw.git#723f4dd6817ad2ffb97fb51dfd1f3549f81f0d97",
-            .hash = "glfw-0.0.0-bOgnnliqGQArzJGOJzzW-dL5H-sta3U6mauNbpTvaOAp",
+            .url = "git+https://github.com/der-teufel-programming/glfw.git#206deaa2485703ac700d0f3020a8854282aecdbb",
+            .hash = "glfw-0.0.0-bOgnngiqGQCt5HJK25zx1lf9emPYDNtEuQPYmrTCdOoN",
         },
     },
 }
