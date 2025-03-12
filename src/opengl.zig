@@ -163,7 +163,7 @@ pub const GLProc = *const fn () callconv(if (builtin.os.tag == .windows and buil
 /// see also: context_glext, glfwExtensionSupported
 pub fn getProcAddress(proc_name: [*:0]const u8) callconv(.C) ?GLProc {
     internal_debug.assertInitialized();
-    if (c.glfwGetProcAddress(proc_name)) |proc_address| return proc_address;
+    if (c.glfwGetProcAddress(proc_name)) |proc_address| return @ptrCast(proc_address);
     return null;
 }
 
